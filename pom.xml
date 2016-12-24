@@ -15,9 +15,9 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <camel-core.version>2.18.0</camel-core.version>
-    <slf4j-api.version>1.7.21</slf4j-api.version>
-    <ignite.version>1.7.0</ignite.version>
+    <camel-core.version>2.18.1</camel-core.version>
+    <slf4j-api.version>1.7.22</slf4j-api.version>
+    <ignite.version>1.8.0</ignite.version>
   </properties>
 
   <dependencies>
@@ -38,13 +38,6 @@
       <artifactId>camel-bindy</artifactId>
       <version>${camel-core.version}</version>
     </dependency>
-
-    <dependency>
-      <groupId>org.apache.ignite</groupId>
-      <artifactId>ignite-core</artifactId>
-      <version>${ignite.version}</version>
-    </dependency>
-
     <dependency>
       <groupId>org.apache.ignite</groupId>
       <artifactId>ignite-core</artifactId>
