@@ -39,7 +39,7 @@ public class IgniteReader implements org.apache.camel.Processor {
 
     LOGGER.info("There are {} houses that cost more than 100,000", all.size());
 
-    all.stream().forEach(h -> LOGGER.debug(h.getValue().toCSV()));
+    all.forEach(h -> LOGGER.debug(h.getValue().toCSV()));
 
     query = new SqlQuery<AffinityKey<String>, HouseInfo>(HouseInfo.class, sql).setArgs(50000);
     all = cache.query(query).getAll();

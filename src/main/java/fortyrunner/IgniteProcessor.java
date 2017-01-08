@@ -31,10 +31,10 @@ public class IgniteProcessor implements Processor {
 
     long start = System.currentTimeMillis();
 
-    list.stream().forEach(h -> cache.put(h.getKey(), h));
+    list.forEach(h -> cache.put(h.getKey(), h));
 
     long took = System.currentTimeMillis() - start;
-    LOGGER.info("\nIt took {} ms to write {} entries into the cache \n", took, list.size());
+    LOGGER.info("It took {} ms to write {} entries into the cache.", took, list.size());
 
   }
 
