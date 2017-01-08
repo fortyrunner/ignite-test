@@ -1,17 +1,22 @@
 package fortyrunner;
 
-import org.apache.camel.*;
-import org.apache.ignite.*;
-import org.apache.ignite.cache.affinity.*;
-import org.apache.ignite.cache.query.*;
+import org.apache.camel.Exchange;
+import org.apache.ignite.Ignite;
+import org.apache.ignite.IgniteCache;
+import org.apache.ignite.cache.affinity.AffinityKey;
+import org.apache.ignite.cache.query.SqlQuery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.cache.*;
-import java.util.*;
+import javax.cache.Cache;
+import java.util.List;
 
 /**
  * Run a few SQL queries against the ignite cache
  */
 public class IgniteReader implements org.apache.camel.Processor {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(IgniteReader.class);
 
   private final Ignite ignite;
 
@@ -23,8 +28,6 @@ public class IgniteReader implements org.apache.camel.Processor {
   public void process(final Exchange exchange) throws Exception {
     IgniteCache<AffinityKey<String>, HouseInfo> cache = ignite.getOrCreateCache(MainApp.PRICES);
 
-    System.out.println("\n\n\n");
-
     String sql = "price > ?";
 
     long starts = System.currentTimeMillis();
@@ -32,22 +35,20 @@ public class IgniteReader implements org.apache.camel.Processor {
     List<Cache.Entry<AffinityKey<String>, HouseInfo>> all = cache.query(query).getAll();
 
     long took = System.currentTimeMillis() - starts;
-    System.out.printf("\nIt took %d ms to filter %d entries from the cache \n", took, all.size());
+    LOGGER.info("It took {} ms to filter {} entries from the cache", took, all.size());
 
-    System.out.println("There are " + all.size() + " houses that cost more than 100,000\n");
-    for (Cache.Entry<AffinityKey<String>, HouseInfo> entry : all) {
-      HouseInfo houseInfo = entry.getValue();
-      System.out.println(houseInfo.toCSV());
-    }
+    LOGGER.info("There are {} houses that cost more than 100,000", all.size());
 
-    System.out.println("\n\n\n");
+    all.stream().forEach(h -> LOGGER.debug(h.getValue().toCSV()));
 
     query = new SqlQuery<AffinityKey<String>, HouseInfo>(HouseInfo.class, sql).setArgs(50000);
     all = cache.query(query).getAll();
 
-    System.out.println("There are " + all.size() + " houses that cost more than 50,000");
+
+    LOGGER.info("There are {} houses that cost more than 50,000", all.size());
 
 
   }
+
 
 }

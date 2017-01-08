@@ -2,6 +2,8 @@ package fortyrunner;
 
 import org.apache.camel.*;
 import org.apache.ignite.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -11,6 +13,8 @@ import java.util.*;
  * name+date+price. This is unique across the set
  */
 public class IgniteProcessor implements Processor {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(IgniteProcessor.class);
 
   private final Ignite ignite;
 
@@ -26,12 +30,11 @@ public class IgniteProcessor implements Processor {
     List<HouseInfo> list = (List<HouseInfo>) exchange.getIn().getBody();
 
     long start = System.currentTimeMillis();
-    for (HouseInfo houseInfo : list) {
-      cache.put(houseInfo.getKey(), houseInfo);
-    }
+
+    list.stream().forEach(h -> cache.put(h.getKey(), h));
 
     long took = System.currentTimeMillis() - start;
-    System.out.printf("\nIt took %d ms to write %d entries into the cache \n", took, list.size());
+    LOGGER.info("\nIt took {} ms to write {} entries into the cache \n", took, list.size());
 
   }
 
