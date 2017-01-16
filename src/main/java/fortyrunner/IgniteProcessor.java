@@ -1,11 +1,13 @@
 package fortyrunner;
 
-import org.apache.camel.*;
-import org.apache.ignite.*;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
+import org.apache.ignite.Ignite;
+import org.apache.ignite.IgniteCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.List;
 
 
 /**

@@ -1,9 +1,10 @@
 package fortyrunner;
 
 
-import org.apache.camel.builder.*;
-import org.apache.camel.model.dataformat.*;
-import org.apache.ignite.*;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.model.dataformat.BindyType;
+import org.apache.camel.model.dataformat.CsvDataFormat;
+import org.apache.ignite.Ignite;
 
 /**
  * Setup routes to
@@ -36,9 +37,11 @@ public class DataFlow extends RouteBuilder {
     from("file:src/data?noop=true").id("A. File Loader and Router.").
       log("Loaded ${file:name}").
       choice().
-      when(header("CamelFileName").
-        endsWith("csv")).to("seda:csv").
-      end();
+      when(header("CamelFileName")
+        .isEqualTo("crimes.csv")).to("direct:crimes")
+      .otherwise().to("seda:csv")
+      .endChoice()
+      .end();
 
     // Separate queue to process CSV file (Note Different thread)
     // bindy is an addin that processes any type of formatted file
@@ -49,6 +52,11 @@ public class DataFlow extends RouteBuilder {
       bindy(BindyType.Csv, HouseInfo.class).
       process(new CsvProcessor()).
       to("seda:persist");
+
+    from("direct:crimes")
+      .process(new CrimesProcessor(this.ignite))
+      .process(new CrimesQuery(this.ignite))
+      .end();
 
 
     // Finally, move the processed files onto a queue that handles

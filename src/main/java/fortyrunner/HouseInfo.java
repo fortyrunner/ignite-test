@@ -1,10 +1,11 @@
 package fortyrunner;
 
 
-import org.apache.camel.dataformat.bindy.annotation.*;
-import org.apache.ignite.cache.query.annotations.*;
+import org.apache.camel.dataformat.bindy.annotation.CsvRecord;
+import org.apache.camel.dataformat.bindy.annotation.DataField;
+import org.apache.ignite.cache.query.annotations.QuerySqlField;
 
-import java.io.*;
+import java.io.Serializable;
 
 /**
  * Annotated class that matches the CSV format of our House Prices file
