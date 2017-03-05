@@ -39,4 +39,3 @@ Adding more nodes reduces the time considerably.
  
  Note that the file has over 6,000,000 records and is around 1.5GB in size.
  
- 
