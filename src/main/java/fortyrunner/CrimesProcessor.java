@@ -74,7 +74,7 @@ public class CrimesProcessor implements org.apache.camel.Processor {
   }
 
   private void createCache(List<Crime> crimes) {
-    IgniteCache<String, Crime> cache = this.ignite.getOrCreateCache(MainApp.CRIMES);
+    IgniteCache<String, Crime> cache = this.ignite.getOrCreateCache(CrimeConfiguration.CRIMES);
 
     LOGGER.info("Creating Ignite cache");
     long starts = System.currentTimeMillis();
@@ -83,7 +83,7 @@ public class CrimesProcessor implements org.apache.camel.Processor {
     crimes.forEach(e -> map.put(e.getId(), e));
 
 
-    try (IgniteDataStreamer<String, Crime> streamer = this.ignite.dataStreamer(MainApp.CRIMES)) {
+    try (IgniteDataStreamer<String, Crime> streamer = this.ignite.dataStreamer(CrimeConfiguration.CRIMES)) {
       streamer.perNodeBufferSize(2048); // default 1024
 
       crimes.forEach(e -> streamer.addData(e.getId(), e));

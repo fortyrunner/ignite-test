@@ -1,29 +1,31 @@
 package fortyrunner;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
+import org.apache.ignite.Ignition;
 import org.apache.ignite.cache.affinity.AffinityKey;
 import org.apache.ignite.cache.query.SqlQuery;
+import org.apache.ignite.configuration.IgniteConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.cache.Cache;
 import java.util.List;
 
-public class CrimesQuery implements Processor {
+public class SimpleQuery {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CrimesQuery.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimpleQuery.class);
 
-  private final Ignite ignite;
 
-  public CrimesQuery(Ignite ignite) {
-    this.ignite = ignite;
-  }
+  public static void main(final String... args) {
 
-  @Override
-  public void process(Exchange exchange) throws Exception {
+
+    IgniteConfiguration cfg = ClusterConfiguration.getIgniteConfiguration();
+    Ignite ignite = Ignition.start(cfg);
+
+    CrimeConfiguration crimes = new CrimeConfiguration();
+    crimes.init(ignite);
+
 
     IgniteCache<AffinityKey<String>, Crime> crimeCache = ignite.getOrCreateCache(CrimeConfiguration.CRIMES);
 
@@ -42,6 +44,5 @@ public class CrimesQuery implements Processor {
 
 
   }
-
 
 }
