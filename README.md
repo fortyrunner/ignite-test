@@ -31,8 +31,7 @@ Adding more nodes reduces the time considerably.
  If you run without a cluster - reduce the number of records in the LIMIT constant to around 1,000,000 or add LOTS of memory
  
 # Downloading the data
- 
- 
+  
  Use the following curl command to down load the file - place it into src/data
  
  `curl https://data.cityofchicago.org/api/views/ijzp-q8t2/rows.csv?accessType=DOWNLOAD>crimes.csv`
