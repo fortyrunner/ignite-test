@@ -9,6 +9,7 @@ import org.apache.ignite.cache.CachePeekMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,41 +29,52 @@ import java.util.stream.Collectors;
  */
 public class CrimesProcessor implements org.apache.camel.Processor {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CsvProcessor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CrimesProcessor.class);
 
   private final Ignite ignite;
 
-  public CrimesProcessor(Ignite ignite) {
+  private final long limit;
+
+  public CrimesProcessor(final Ignite ignite, final long limit) {
     this.ignite = ignite;
+    this.limit = limit;
   }
 
 
   @Override
   public void process(Exchange exchange) throws Exception {
 
-    GenericFile body = (GenericFile) exchange.getIn().getBody();
-    Path file = Paths.get(body.getAbsoluteFilePath());
+    Path file = getPath(exchange);
 
-    Optional<String> first = Files.lines(file).findFirst();
-
-    LOGGER.info(first.get());
+    printHeader(file);
 
     long starts = System.currentTimeMillis();
 
     List<Crime> set = Files.lines(file)
       .map(s -> createCrime(s.split(",")))
-      .limit(1_000_000)
+      .limit(this.limit)
       .collect(Collectors.toList());
 
     long took = System.currentTimeMillis() - starts;
-    LOGGER.info("Parsed size=" + set.size() + " records in {} ms", took);
+    LOGGER.info("Parsed size= {} records in {} ms", set.size(), took);
 
     createCache(set);
 
   }
 
+  private void printHeader(Path file) throws IOException {
+    Optional<String> headerLine = Files.lines(file).findFirst();
+
+    LOGGER.info(headerLine.get());
+  }
+
+  private Path getPath(Exchange exchange) {
+    GenericFile body = (GenericFile) exchange.getIn().getBody();
+    return Paths.get(body.getAbsoluteFilePath());
+  }
+
   private void createCache(List<Crime> crimes) {
-    IgniteCache<String, Crime> cache = ignite.getOrCreateCache(MainApp.CRIMES);
+    IgniteCache<String, Crime> cache = this.ignite.getOrCreateCache(MainApp.CRIMES);
 
     LOGGER.info("Creating Ignite cache");
     long starts = System.currentTimeMillis();
@@ -71,15 +83,15 @@ public class CrimesProcessor implements org.apache.camel.Processor {
     crimes.forEach(e -> map.put(e.getId(), e));
 
 
-    try (IgniteDataStreamer<String, Crime> stmr = ignite.dataStreamer(MainApp.CRIMES)) {
-      stmr.perNodeBufferSize(2048); // default 1024
+    try (IgniteDataStreamer<String, Crime> streamer = this.ignite.dataStreamer(MainApp.CRIMES)) {
+      streamer.perNodeBufferSize(2048); // default 1024
 
-      crimes.forEach(e -> stmr.addData(e.getId(), e));
+      crimes.forEach(e -> streamer.addData(e.getId(), e));
 
     }
 
     long took = System.currentTimeMillis() - starts;
-    LOGGER.info("Added to Ignite, cache=" + cache.size(CachePeekMode.ALL) + ", took={} ms", took);
+    LOGGER.info("Added to Ignite, cache={}, took={} ms", cache.size(CachePeekMode.ALL), took);
   }
 
   private Crime createCrime(String[] line) {
