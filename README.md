@@ -15,12 +15,15 @@ Adding more nodes reduces the time considerably.
  
  E.g 
 
- A single node with a 8GB Heap taskes 121 secs to insert and 764ms to query 381393 records
+ A single node with a 8GB Heap takes 121 secs to insert and 764ms to query 381393 records
  
- 3 nodes - 28 secs to add, 1 secs to query 
- 4 nodes - 29 secs to add, 1 secs to query
- 5 nodes - 29 secs to add, 1.2 secs to query
- 6 nodes - 20 secs to add, 785ms to query
+ 3 nodes - 28 secs to add, 1 secs to query.
+ 
+ 4 nodes - 29 secs to add, 1 secs to query.
+ 
+ 5 nodes - 29 secs to add, 1.2 secs to query.
+ 
+ 6 nodes - 20 secs to add, 785ms to query.
  
  If you run without a cluster - reduce the number of records in the LIMIT constant to around 1,000,000 or add LOTS of memory
  
