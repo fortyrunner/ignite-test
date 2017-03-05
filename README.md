@@ -32,7 +32,7 @@ Adding more nodes reduces the time considerably.
  
 # Downloading the data
   
- Use the following curl command to down load the file - place it into src/data
+ Use the following curl command to download the file - place it into src/data
  
  `curl https://data.cityofchicago.org/api/views/ijzp-q8t2/rows.csv?accessType=DOWNLOAD>crimes.csv`
  
