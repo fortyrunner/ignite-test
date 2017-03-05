@@ -1,10 +1,13 @@
+# Introduction 
+
 A sample project that uses Apache Camel and Ignite to 
 
 1. watch for a CSV file of Chicago crimes
 2. parse the file and create a collection of objects
 3. insert them into an Apache Ignite instance
 4. Perform selected reads using SQL filters
- 
+
+# Data
  
 This demo is best run when connecting to an Ignite cluster of 4 nodes or more.
 
@@ -27,6 +30,13 @@ Adding more nodes reduces the time considerably.
  
  If you run without a cluster - reduce the number of records in the LIMIT constant to around 1,000,000 or add LOTS of memory
  
+# Downloading the data
  
+ 
+ Use the following curl command to down load the file - place it into src/data
+ 
+ `curl https://data.cityofchicago.org/api/views/ijzp-q8t2/rows.csv?accessType=DOWNLOAD>crimes.csv`
+ 
+ Note that the file has over 6,000,000 records and is around 1.5GB in size.
  
  
