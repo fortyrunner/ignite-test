@@ -9,7 +9,7 @@ public class CrimeConfiguration {
 
   public static final int START_SIZE = 1_300_000;
 
-  public static final long LIMIT = 6_000_0000;
+  public static final long LIMIT = 6_000_000;
 
   public void init(Ignite ignite) {
     CacheConfiguration<String, Crime> config = new CacheConfiguration<>(CrimeConfiguration.CRIMES);
