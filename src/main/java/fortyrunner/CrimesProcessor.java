@@ -50,7 +50,7 @@ public class CrimesProcessor implements org.apache.camel.Processor {
 
     long starts = System.currentTimeMillis();
 
-    List<Crime> set = Files.lines(file)
+    List<Crime> set = Files.lines(file).parallel()
       .map(s -> createCrime(s.split(",")))
       .limit(this.limit)
       .collect(Collectors.toList());

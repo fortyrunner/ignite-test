@@ -15,7 +15,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <camel-core.version>2.18.2</camel-core.version>
-    <ignite.version>1.8.0</ignite.version>
+    <ignite.version>1.9.0</ignite.version>
     <slf4j-api.version>1.7.24</slf4j-api.version>
     <logback-classic.version>1.2.1</logback-classic.version>
   </properties>
