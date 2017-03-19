@@ -1,0 +1,4 @@
+export USER_LIBS=target/classes
+
+ignite.sh crime-cache.xml
+
