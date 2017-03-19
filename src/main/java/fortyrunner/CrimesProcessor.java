@@ -50,13 +50,14 @@ public class CrimesProcessor implements org.apache.camel.Processor {
 
     long starts = System.currentTimeMillis();
 
-    List<Crime> set = Files.lines(file).parallel()
+    List<Crime> set = Files.lines(file)
+      .parallel()
       .map(s -> createCrime(s.split(",")))
       .limit(this.limit)
       .collect(Collectors.toList());
 
     long took = System.currentTimeMillis() - starts;
-    LOGGER.info("Parsed size= {} records in {} ms", set.size(), took);
+    LOGGER.info("Parsed size={} records in {} ms", set.size(), took);
 
     createCache(set);
 

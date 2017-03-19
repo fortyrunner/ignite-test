@@ -12,7 +12,7 @@ import org.apache.ignite.configuration.IgniteConfiguration;
  * <p>
  * Using the command line
  * <p>
- * ignite.sh /Users/john/ignite/examples/config/example-cache.xml
+ * ignite.sh /Users/john/ignite/examples/config/crime-cache.xml
  * <p>
  * Start a number of nodes - 4 is a good number for 6mi records.
  * <p>

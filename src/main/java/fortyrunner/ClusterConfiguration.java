@@ -8,6 +8,8 @@ import java.util.Arrays;
 
 public final class ClusterConfiguration {
 
+  public static final boolean CLIENT_MODE = true;
+
   private ClusterConfiguration() {
 
   }
@@ -23,14 +25,15 @@ public final class ClusterConfiguration {
     // set the multi cast ip finder for spi
     spi.setIpFinder(tcMp);
 
-
     // Pure client mode - this client will not act as a node
 
     IgniteConfiguration cfg = new IgniteConfiguration();
-    cfg.setClientMode(true);
+    cfg.setClientMode(CLIENT_MODE);
 
     // set the discovery spi to ignite configuration
     cfg.setDiscoverySpi(spi);
+
+    cfg.setPeerClassLoadingEnabled(true);
 
     return cfg;
   }

@@ -9,6 +9,14 @@
 
     <property name="peerClassLoadingEnabled" value="true"/>
 
+    <!--<property name="cacheConfiguration">-->
+    <!--<list>-->
+    <!--<bean class="org.apache.ignite.configuration.CacheConfiguration">-->
+    <!--<property name="indexedTypes" value="java.lang.String,fortyrunner.Crime"/>-->
+    <!--</bean>-->
+    <!--</list>-->
+    <!--</property>-->
+
     <!-- Configure TCP discovery SPI to provide list of initial nodes. -->
     <property name="discoverySpi">
       <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">

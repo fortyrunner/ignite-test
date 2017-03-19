@@ -8,16 +8,21 @@ import org.apache.ignite.cache.query.SqlQuery;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.cache.Cache;
+import javax.sql.DataSource;
 import java.util.List;
+import java.util.Map;
 
 public class SimpleQuery {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SimpleQuery.class);
 
 
-  public static void main(final String... args) {
+  public static void main(final String... args) throws InterruptedException {
 
 
     IgniteConfiguration cfg = ClusterConfiguration.getIgniteConfiguration();
@@ -26,6 +31,15 @@ public class SimpleQuery {
     CrimeConfiguration crimes = new CrimeConfiguration();
     crimes.init(ignite);
 
+    ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"beans.xml"});
+
+    DataSource dataSource = (DataSource) context.getBean("dataSource");
+
+    JdbcTemplate template = new JdbcTemplate(dataSource);
+
+    List<Map<String, Object>> maps = template.queryForList("SELECT * FROM crime ");
+
+    LOGGER.info(" There are {} crimes read using Spring", maps.size());
 
     IgniteCache<AffinityKey<String>, Crime> crimeCache = ignite.getOrCreateCache(CrimeConfiguration.CRIMES);
 
@@ -41,6 +55,9 @@ public class SimpleQuery {
     LOGGER.info("It took {} ms to filter {} entries from the cache", took, all.size());
 
     LOGGER.info("There are {} {} crimes", all.size(), crimeType);
+
+
+    ignite.close();
 
 
   }

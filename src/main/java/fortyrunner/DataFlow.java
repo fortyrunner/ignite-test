@@ -18,7 +18,7 @@ public class DataFlow extends RouteBuilder {
 
   private final Ignite ignite;
 
-  private long limit;
+  private final long limit;
 
   public DataFlow(final Ignite ignite, final long limit) {
     this.ignite = ignite;
