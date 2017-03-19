@@ -14,7 +14,7 @@ This demo is best run when connecting to an Ignite cluster of 4 nodes or more.
 This was tested on a 4.0GHZ 24GB Core i7 iMac
 There are 6,000,000 lines in the CSV file.
  
-Adding more nodes reduces the time considerably.
+Adding more nodes reduces the time a fair bit but there is a point of diminishing returns YMMV.
  
  E.g 
 
@@ -32,9 +32,39 @@ Adding more nodes reduces the time considerably.
  
 # Downloading the data
   
- Use the following curl command to download the file - place it into src/data
+ Use the following curl command to download the file - place it into `src/data`
  
  `curl https://data.cityofchicago.org/api/views/ijzp-q8t2/rows.csv?accessType=DOWNLOAD>crimes.csv`
  
  Note that the file has over 6,000,000 records and is around 1.5GB in size.
  
+ A small file with a few lines has been added to this distro
+ 
+In the root folder there is a bash script called `node`. This will start a single node up using the `crime-cache.xml` file.
+Don't forget to `chmod` it!
+
+# Setting up a JDBC Connection
+
+This can be quite fiddly the first time. I had a few false starts and the documentation on the Ignite website and elsewhere
+can be a bit difficult to parse.
+
+Here are my tips.
+
+* Make sure that you name your tables correctly. 
+  * I created a cache called CRIMES and a class (to insert into the table) called Crime. 
+  * This is wrong, you must name the table the same name as the class
+* You may need to explicitly set PeerClassLoading in code and config
+  * E.g. `cfg.setPeerClassLoadingEnabled(true);`
+  * You will also need to do this in the XML files
+* Setting up your own `ignite-jdbc.xml` file is worth while.
+  * It makes connection a lot easier - see the `beans.xml` file for how to setup a datasource
+* You will need to add custom classes to the xml config for indexing
+  * E.g. `<property name="indexedTypes" value="java.lang.String,fortyrunner.Crime"/>`
+
+
+
+
+
+
+.
+
