@@ -14,13 +14,14 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <camel-core.version>2.18.2</camel-core.version>
+    <camel-core.version>2.18.3</camel-core.version>
     <ignite.version>1.9.0</ignite.version>
     <slf4j-api.version>1.7.24</slf4j-api.version>
     <logback-classic.version>1.2.1</logback-classic.version>
   </properties>
 
   <dependencies>
+
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-core</artifactId>
@@ -56,6 +57,7 @@
       <artifactId>ignite-indexing</artifactId>
       <version>${ignite.version}</version>
     </dependency>
+
 
     <!-- logging -->
     <dependency>
