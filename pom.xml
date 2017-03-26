@@ -17,7 +17,7 @@
     <camel-core.version>2.18.3</camel-core.version>
     <ignite.version>1.9.0</ignite.version>
     <slf4j-api.version>1.7.24</slf4j-api.version>
-    <logback-classic.version>1.2.1</logback-classic.version>
+    <logback-classic.version>1.2.2</logback-classic.version>
   </properties>
 
   <dependencies>
